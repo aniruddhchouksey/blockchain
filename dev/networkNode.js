@@ -5,6 +5,7 @@ const BlockChain = require('./blockchain');
 const uuid = require('uuid/v1');
 const port = process.argv[2]; 
 const rp = require('request-promise');
+const mongoose = require('mongoose');
 
 const nodeAddress = uuid().split('-').join('');
 

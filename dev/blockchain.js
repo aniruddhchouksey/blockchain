@@ -7,7 +7,7 @@ function Blockchain() {
 	this.pendingTransactions = [];//all new transaction and pending transactions are placed here before mining
 	this.currentNodeUrl = currentNodeUrl;
 	this.networkNodes = [];
-	//genisin block
+	//genisin block 
 	this.createNewBlock(100, "0", "0");
 }
 
@@ -56,10 +56,10 @@ Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, n
 Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData) {
 	let nonce = 0;
 	let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
-	while(hash.substring(0,4) !== '0000') {
+	while(hash.substring(0,5) !== '00000') {
 		nonce++;
 		hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
-		// console.log(nonce + " " + hash);		
+		console.log(nonce + " " + hash);		
 	}
 	return nonce;
 }
