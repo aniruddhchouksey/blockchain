@@ -14,6 +14,9 @@ const bitcoin = new BlockChain();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.get('/',function(req,res){
+	res.send('everything is working');
+});
 //send back entire block chain
 app.get('/blockchain', function(req,res) {
 	res.send(bitcoin);
