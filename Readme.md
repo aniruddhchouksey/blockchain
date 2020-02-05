@@ -16,4 +16,3 @@ to see the blockchian in the json format you can make a get request to the local
 
 all the time the blockchain is working we can see the logs on the terminal
 
-

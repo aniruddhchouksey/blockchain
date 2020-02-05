@@ -15,24 +15,30 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/',function(req,res){
 	res.send('everything is working');
-	console.info('HIT GET "/"');
+	console.info('HIT GET "/" endpoint \n everthing is working');
 });
 //send back entire block chain
 app.get('/blockchain', function(req,res) {
 	res.send(bitcoin);
+	console.info('HIT GET "/blockchain" endpoint \n BLOCKCHAIN\n\n');
+	console.info(bitcoin);
 });
 
 //creating new transaction
 app.post('/transaction', function(req, res){
 	const newTransaction = req.body;
+	console.info('HIT POST "/transaction" endpoint \n\n');
 	console.log(newTransaction);
 	const blockIndex = bitcoin.addTransactionToPendingTransaction(newTransaction);
 	res.json({note: `transaction will be added to block ${blockIndex}.`})
 });
 
 app.post('/transaction/broadcast', function(req, res){
+	console.info('HIT POST "/transaction/broadcast" endpoint \n\n');
 	const newTransaction = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient);
+	console.info('addin the transaction to pending transaction...');
 	bitcoin.addTransactionToPendingTransaction(newTransaction);
+	console.info('broadcasting the transaction to the other nodes...')
 	const requestPromises = [];
 	bitcoin.networkNodes.forEach(networkNodeUrl => {
 		const requestOptions = {
@@ -53,7 +59,8 @@ app.post('/transaction/broadcast', function(req, res){
 
 //mining new blocks
 app.get('/mine', function(req, res){
-
+	console.info('HIT GET "/mine" endpoint \n\n');
+	
 	const lastBlock = bitcoin.getLastBlock();
 	const previousBlockHash = lastBlock['hash'];
 
@@ -99,8 +106,10 @@ app.get('/mine', function(req, res){
 });
 
 app.post('/receive-new-block', function(req, res) {
+	console.info('HIT POST "/recieve-new-block" endpoint \n\n');
 	const newBlock = req.body.newBlock;
 	//verification of new block
+	console.info('verify the integrity of the new block\n');
 	const lastBlock = bitcoin.getLastBlock();
 	const correctHash = lastBlock.hash === newBlock.previousBlockHash;
 	const correctIndex = lastBlock['index'] + 1 === newBlock['index'];
@@ -108,11 +117,13 @@ app.post('/receive-new-block', function(req, res) {
 	if(correctIndex && correctHash) {
 		bitcoin.chain.push(newBlock);
 		bitcoin.pendingTransactions = [];
+		console.info('block verified and added\n');
 		res.json({
 			note: 'new block recieved and accepted',
 			newblock: newBlock
 		});
 	} else{
+		console.info('new block rejected\n');
 		res.json({
 			note: 'new block rejected',
 			newBlock: newBlock
@@ -122,6 +133,7 @@ app.post('/receive-new-block', function(req, res) {
 
 // register a node and broadcast it the network
 app.post('/register-and-broadcast-node', function(req, res) {
+	console.info('HIT POST "/register-and-broadcast-node" endpoint \n\n');
 	const newNodeUrl = req.body.newNodeUrl;
 	if (bitcoin.networkNodes.indexOf(newNodeUrl) == -1) bitcoin.networkNodes.push(newNodeUrl);
 
@@ -257,5 +269,5 @@ app.get('/block-explorer', function(req, res) {
 
 
 app.listen(port, function() {
-	console.log(`listening on port ${port}....`);
+	console.log(`listening on port ....`);
 });
