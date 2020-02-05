@@ -5,7 +5,6 @@ const BlockChain = require('./blockchain');
 const uuid = require('uuid/v1');
 const port = process.argv[2]; 
 const rp = require('request-promise');
-const mongoose = require('mongoose');
 
 const nodeAddress = uuid().split('-').join('');
 
@@ -16,6 +15,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/',function(req,res){
 	res.send('everything is working');
+	console.info('HIT GET "/"');
 });
 //send back entire block chain
 app.get('/blockchain', function(req,res) {
@@ -231,7 +231,7 @@ app.get('/block/:blockHash', function(req, res) {
 	res.json({
 		block: correctBlock
 	});
-});
+}); 
 
 
 app.get('/transaction/:transactionId', function(req, res) {
