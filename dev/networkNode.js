@@ -135,6 +135,7 @@ app.post('/receive-new-block', function(req, res) {
 app.post('/register-and-broadcast-node', function(req, res) {
 	console.info('HIT POST "/register-and-broadcast-node" endpoint \n\n');
 	const newNodeUrl = req.body.newNodeUrl;
+	console.info('registring node' + newNodeUrl)
 	if (bitcoin.networkNodes.indexOf(newNodeUrl) == -1) bitcoin.networkNodes.push(newNodeUrl);
 
 	const regNodesPromises = [];
@@ -162,17 +163,19 @@ app.post('/register-and-broadcast-node', function(req, res) {
 	})
 	.then(data => {
 		res.json({ note: 'New node registered with network successfully.' });
-	});
+	}).catch(()=>{console.log('the promise was rejected')});
 });
 
 
 // register a node with the network
 app.post('/register-node', function(req, res) {
+	console.info('HIT POST "/register-node" endpoint \n\n');
 	const newNodeUrl = req.body.newNodeUrl;
 	const nodeNotAlreadyPresent = bitcoin.networkNodes.indexOf(newNodeUrl) == -1;
 	const notCurrentNode = bitcoin.currentNodeUrl !== newNodeUrl;
 	if (nodeNotAlreadyPresent && notCurrentNode) bitcoin.networkNodes.push(newNodeUrl);
 	res.json({ note: 'New node registered successfully.' });
+	console.info(newNodeUrl + ' registered successfully');
 });
 
 
